@@ -1,0 +1,66 @@
+#!/usr/bin/env node
+/** Mejora UI deportes/hipismo en el bundle de producción. */
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const BUNDLE = path.join(ROOT, 'assets/index-DZfj7dy3.js');
+let s = fs.readFileSync(BUNDLE, 'utf8');
+
+const patches = [
+  {
+    name: 'fetch live_odds (ventana + filtro caballos sin cuota)',
+    old: 'const f=l.useCallback(async()=>{const g=new Date(Date.now()-ak*3600*1e3).toISOString();let x=Nn.from("live_odds").select("*").gte("commence_time",g).order("commence_time",{ascending:!0});const{data:w}=await x;c(w||[])},[]);',
+    new: 'const f=l.useCallback(async()=>{const g=new Date(Date.now()-4*3600*1e3).toISOString(),j=new Date(Date.now()+72*3600*1e3).toISOString();const{data:w}=await Nn.from("live_odds").select("*").gte("commence_time",g).lte("commence_time",j).order("commence_time",{ascending:!0}).limit(800);c((w||[]).filter(q=>q.sport!=="horses"||q.home_odds!=null))},[]);',
+  },
+  {
+    name: 'tarjeta de evento + mercados completos',
+    old: `b=({row:g})=>{const x=lg(g)==="live",w=g.sport==="horses";return W.jsxs("div",{style:{background:"#213743",borderRadius:14,padding:"16px 16px 14px",marginBottom:12},children:[W.jsxs("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:14},children:[x?W.jsx("span",{style:{background:"#1a2c38",color:"#fff",fontSize:12,fontWeight:700,padding:"3px 9px",borderRadius:6},children:_Q(g)}):W.jsx("span",{style:{color:"#b1bad3",fontSize:12,fontWeight:600},children:new Date(g.commence_time).toLocaleString("es",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}),W.jsx("span",{style:{marginLeft:"auto",color:"#b1bad3",fontSize:12},children:g.league||rI(g.sport)})]}),w?W.jsxs("div",{style:{display:"flex",alignItems:"center",gap:12,marginBottom:14},children:[W.jsx(ag,{name:g.home_team,size:30}),W.jsxs("div",{style:{color:"#fff",fontWeight:700,fontSize:16},children:[g.home_team,g.away_team&&W.jsxs("span",{style:{color:"#b1bad3",fontWeight:500,fontSize:13},children:[" · ",g.away_team]})]})]}):W.jsxs("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:14},children:[W.jsxs("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:8,flex:1},children:[W.jsx(ag,{name:g.home_team,size:40}),W.jsx("span",{style:{color:"#fff",fontWeight:600,fontSize:14,textAlign:"center"},children:g.home_team}),g.home_score!=null&&W.jsx("span",{style:{color:"#f0b429",fontWeight:800},children:g.home_score})]}),W.jsx("span",{style:{color:"#5a6573",fontWeight:700},children:"VS"}),W.jsxs("div",{style:{display:"flex",flexDirection:"column",alignItems:"center",gap:8,flex:1},children:[W.jsx(ag,{name:g.away_team,size:40}),W.jsx("span",{style:{color:"#fff",fontWeight:600,fontSize:14,textAlign:"center"},children:g.away_team}),g.away_score!=null&&W.jsx("span",{style:{color:"#f0b429",fontWeight:800},children:g.away_score})]})]}),W.jsx("div",{style:{display:"flex",gap:8},children:w?W.jsx(y,{label:"Gana",odds:g.home_odds,onClick:()=>S(g,g.home_odds,"moneyline",\`\${g.home_team} (Gana)\`),full:!0}):W.jsxs(W.Fragment,{children:[W.jsx(y,{label:g.home_team,odds:g.home_odds,onClick:()=>S(g,g.home_odds,"1x2",\`\${g.home_team} (Local)\`)}),g.draw_odds!=null&&W.jsx(y,{label:"Empate",odds:g.draw_odds,onClick:()=>S(g,g.draw_odds,"1x2","Empate")}),W.jsx(y,{label:g.away_team,odds:g.away_odds,onClick:()=>S(g,g.away_odds,"1x2",\`\${g.away_team} (Visitante)\`)})]})})]})},`,
+    new: `R=({race:g})=>{const x=lg(g.horses[0])==="live";return W.jsxs("div",{className:"gd-race-card",children:[W.jsxs("div",{className:"gd-event-head",children:[x?W.jsx("span",{className:"gd-live-pill",children:_Q(g.horses[0])}):W.jsx("span",{className:"gd-time-pill",children:new Date(g.time).toLocaleString("es",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}),W.jsx("span",{className:"gd-league-pill",children:g.league})]}),W.jsx("div",{className:"gd-market-title",children:"Selecciona tu caballo"}),W.jsx("div",{className:"gd-odds-grid gd-odds-grid-many",children:g.horses.map(h=>{const nm=(h.home_team||"").replace(/^#\\d+\\s*/,""),pg=(h.home_team||"").match(/^#(\\d+)/);return W.jsx(y,{label:nm,sub:pg?"#"+pg[1]:void 0,odds:h.home_odds,onClick:()=>S(h,h.home_odds,"moneyline",h.home_team+" (Gana)")},h.id)})})]})},b=({row:g})=>{const[xm,setXm]=l.useState(null),[ld,setLd]=l.useState(!1),ev=lg(g)==="live",tb=String(g.id||"").startsWith("tb_"),evId=tb?String(g.id).split("_").pop():null,ldX=async()=>{if(xm||ld||!evId)return;setLd(!0);try{const r=await fetch("https://sb2frontend-altenar2.biahosted.com/api/Widget/GetEventDetails?integration=triunfobet&culture=es-ES&eventId="+evId);if(!r.ok)return;const C=await r.json(),od=Object.fromEntries((C.odds||[]).map(o=>[o.id,o])),sk=/^1x2|hándicap|handicap|total|ganador/i,mk=(C.markets||[]).filter(m=>m.name&&!sk.test(m.name)).slice(0,14);setXm(mk.map(m=>{const outs=[];for(const row of m.desktopOddIds||[])for(const oid of row){const o=od[oid];o&&outs.push({n:(o.name||"")+(m.sv?" "+m.sv:""),p:o.price})}return{t:m.name,outs:outs.slice(0,14)}}).filter(m=>m.outs.length))}catch{}finally{setLd(!1)}},mkts=[];{const h2=[];g.home_odds!=null&&h2.push({lb:"1",nm:g.home_team,od:g.home_odds,ty:"1x2",sel:g.home_team+" (Local)"});g.draw_odds!=null&&h2.push({lb:"X",nm:"Empate",od:g.draw_odds,ty:"1x2",sel:"Empate"});g.away_odds!=null&&h2.push({lb:"2",nm:g.away_team,od:g.away_odds,ty:"1x2",sel:g.away_team+" (Visitante)"});h2.length&&mkts.push({t:"Resultado (1X2)",items:h2});const hc=[];g.home_spread_odds!=null&&hc.push({lb:String(g.home_spread??""),nm:g.home_team,od:g.home_spread_odds,ty:"handicap",sel:g.home_team+" "+g.home_spread});g.away_spread_odds!=null&&hc.push({lb:String(g.away_spread??""),nm:g.away_team,od:g.away_spread_odds,ty:"handicap",sel:g.away_team+" "+g.away_spread});hc.length&&mkts.push({t:"Handicap",items:hc});const tt=[];g.over_odds!=null&&tt.push({lb:"+",nm:"Más "+g.total_line,od:g.over_odds,ty:"total",sel:"Más "+g.total_line});g.under_odds!=null&&tt.push({lb:"-",nm:"Menos "+g.total_line,od:g.under_odds,ty:"total",sel:"Menos "+g.total_line});tt.length&&mkts.push({t:"Total "+(g.total_line??""),items:tt})}return W.jsxs("div",{className:"gd-event-card",children:[W.jsxs("div",{className:"gd-event-head",children:[ev?W.jsx("span",{className:"gd-live-pill",children:_Q(g)}):W.jsx("span",{className:"gd-time-pill",children:new Date(g.commence_time).toLocaleString("es",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}),W.jsx("span",{className:"gd-league-pill",children:g.league||rI(g.sport)})]}),W.jsxs("div",{className:"gd-teams",children:[W.jsxs("div",{className:"gd-team",children:[W.jsx(ag,{name:g.home_team,size:44}),W.jsx("span",{className:"gd-team-name",children:g.home_team}),g.home_score!=null&&W.jsx("span",{className:"gd-score",children:g.home_score})]}),W.jsx("span",{className:"gd-vs",children:"VS"}),W.jsxs("div",{className:"gd-team",children:[W.jsx(ag,{name:g.away_team,size:44}),W.jsx("span",{className:"gd-team-name",children:g.away_team}),g.away_score!=null&&W.jsx("span",{className:"gd-score",children:g.away_score})]})]}),mkts.map((sec,si)=>W.jsxs("div",{className:"gd-market-block",children:[W.jsx("div",{className:"gd-market-title",children:sec.t}),W.jsx("div",{className:"gd-odds-grid",children:sec.items.map((it,ii)=>W.jsx(y,{label:it.lb==="1"||it.lb==="2"||it.lb==="X"?it.lb:it.nm,sub:it.lb!=="1"&&it.lb!=="2"&&it.lb!=="X"?it.lb:void 0,odds:it.od,chip:!0,onClick:()=>S(g,it.od,it.ty,it.sel)},si+"-"+ii))})]},si)),xm&&xm.map((sec,si)=>W.jsxs("div",{className:"gd-market-block gd-market-extra",children:[W.jsx("div",{className:"gd-market-title",children:sec.t}),W.jsx("div",{className:"gd-odds-grid gd-odds-grid-many",children:sec.outs.map((it,ii)=>W.jsx(y,{label:it.n,odds:it.p,onClick:()=>S(g,it.p,"prop",it.n)},si+"x"+ii))})]},si)),tb&&!xm&&W.jsx("button",{className:"gd-more-btn",onClick:ldX,disabled:ld,children:ld?"Cargando…":"+ Ver más cuotas"})]})},`,
+  },
+  {
+    name: 'botón de cuota',
+    old: 'y=({label:g,odds:x,onClick:w,full:$})=>{const C=IQ(x);return W.jsxs("button",{onClick:w,disabled:C==null,style:{flex:"1",background:"#0f212e",border:"1px solid #2f4553",borderRadius:9,padding:"10px 8px",cursor:C==null?"default":"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:4,minWidth:0},children:[W.jsx("span",{style:{color:"#b1bad3",fontSize:11,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",maxWidth:"100%"},children:g}),W.jsx("span",{style:{color:C==null?"#566":"#fff",fontWeight:800,fontSize:15},children:C??"–"})]})};',
+    new: 'y=({label:g,sub:x,odds:w,onClick:$,full:C,chip:O})=>{const I=IQ(w);return W.jsxs("button",{className:"gd-odd-btn"+(I==null?" is-disabled":"")+(O?" is-chip":""),onClick:$,disabled:I==null,style:C?{gridColumn:"1 / -1"}:void 0,children:[W.jsx("span",{className:"gd-odd-label",children:g}),x&&W.jsx("span",{className:"gd-odd-sub",children:x}),W.jsx("span",{className:"gd-odd-price",children:I??"–"})]})};',
+  },
+  {
+    name: 'listado agrupado (carreras + partidos)',
+    old: '(u==="live"?p:[...p,...m]).map(g=>W.jsx(b,{row:g},g.id))',
+    new: '(u==="live"?(_$=>{const _E=[],_M=new Map;for(const g of _$){if(g.sport==="horses"){const k=g.league+"|"+g.commence_time;if(!_M.has(k))_M.set(k,{league:g.league,time:g.commence_time,horses:[]});_M.get(k).horses.push(g)}else _E.push({k:"e",g})}return[..._E,...[..._M.values()].map(g=>({k:"r",g}))].sort((a,b)=>new Date(a.k==="e"?a.g.commence_time:a.g.time)-new Date(b.k==="e"?b.g.commence_time:b.g.time))})(p):(_$=>{const _E=[],_M=new Map;for(const g of _$){if(g.sport==="horses"){const k=g.league+"|"+g.commence_time;if(!_M.has(k))_M.set(k,{league:g.league,time:g.commence_time,horses:[]});_M.get(k).horses.push(g)}else _E.push({k:"e",g})}return[..._E,...[..._M.values()].map(g=>({k:"r",g}))].sort((a,b)=>new Date(a.k==="e"?a.g.commence_time:a.g.time)-new Date(b.k==="e"?b.g.commence_time:b.g.time))})([...p,...m])).map(q=>q.k==="r"?W.jsx(R,{race:q.g},q.g.league+q.g.time):W.jsx(b,{row:q.g},q.g.id))',
+  },
+  {
+    name: 'layout página deportes',
+    old: 'return[...new Set(a.map(g=>g.sport).filter(Boolean))],W.jsxs("div",{style:{maxWidth:780,margin:"0 auto"},children:[W.jsxs("div",{style:{display:"flex",gap:8,marginBottom:16},children:[W.jsx("button",{onClick:()=>d("home"),style:oI(u==="home"),children:"⚽ Inicio de Deportes"}),W.jsxs("button",{onClick:()=>d("live"),style:oI(u==="live"),children:["▶ Apuestas en vivo ",p.length>0&&W.jsx("span",{style:{background:"#1475e1",color:"#fff",borderRadius:10,padding:"1px 7px",fontSize:11,marginLeft:4},children:p.length})]})]}),e&&W.jsxs("div",{style:{textAlign:"right",color:"#b1bad3",marginBottom:10},children:["Saldo: ",W.jsxs("b",{style:{color:"#f0b429"},children:[t.toFixed(2)," USDT"]})]}),s&&W.jsx("div",{style:{color:"#fff",fontSize:18,fontWeight:700,margin:"4px 0 12px"},children:rI(s)}),',
+    new: 'return[...new Set(a.map(g=>g.sport).filter(Boolean))],W.jsxs("div",{className:"gd-sports-page",children:[W.jsxs("div",{className:"gd-tabs",children:[W.jsx("button",{onClick:()=>d("home"),className:"gd-tab"+(u==="home"?" is-active":""),children:"⚽ Inicio de Deportes"}),W.jsxs("button",{onClick:()=>d("live"),className:"gd-tab"+(u==="live"?" is-active":""),children:["▶ Apuestas en vivo ",p.length>0&&W.jsx("span",{className:"gd-live-badge",children:p.length})]})]}),e&&W.jsxs("div",{className:"gd-balance",children:["Saldo: ",W.jsxs("b",{children:[t.toFixed(2)," USDT"]})]}),s&&W.jsx("div",{className:"gd-sport-title",children:rI(s)}),',
+  },
+  {
+    name: 'título sección en vivo',
+    old: 'u!=="live"&&p.length>0&&W.jsxs("div",{style:{color:"#fff",fontWeight:700,fontSize:15,margin:"4px 0 10px",display:"flex",alignItems:"center",gap:8},children:[W.jsx("span",{style:{width:8,height:8,borderRadius:"50%",background:"#ff4757"}})," Partidos en vivo"]}),',
+    new: 'u!=="live"&&p.length>0&&W.jsxs("div",{className:"gd-section-title",children:[W.jsx("span",{className:"gd-live-dot"})," Partidos en vivo"]}),',
+  },
+  {
+    name: 'estado vacío',
+    old: 'W.jsx("div",{style:{textAlign:"center",color:"#b1bad3",padding:"60px 20px",background:"#213743",borderRadius:14},children:s==="horses"?W.jsxs(W.Fragment,{children:["No hay carreras de hipismo disponibles ahora.",W.jsx("br",{}),W.jsx("span",{style:{fontSize:13,color:"#8893a2"},children:"Las carreras aparecen cuando el proveedor está activo."})]}):"Sin eventos por ahora."})',
+    new: 'W.jsx("div",{className:"gd-empty",children:s==="horses"?W.jsxs(W.Fragment,{children:["No hay carreras de hipismo disponibles ahora.",W.jsx("span",{className:"gd-empty-sub",children:"Las cuotas se actualizan cada pocos minutos desde el servidor."})]}):"Sin eventos por ahora."})',
+  },
+];
+
+let ok = 0;
+for (const p of patches) {
+  if (!s.includes(p.old)) {
+    if (p.name.includes('fetch') && s.includes('lte("commence_time",j)')) {
+      console.log(`SKIP (ya aplicado): ${p.name}`);
+      ok++;
+      continue;
+    }
+    console.error(`MISSING: ${p.name}`);
+    process.exit(1);
+  }
+  s = s.replace(p.old, p.new);
+  console.log(`OK: ${p.name}`);
+  ok++;
+}
+
+fs.writeFileSync(BUNDLE, s);
+console.log(`\nListo. ${ok}/${patches.length} parches aplicados.`);
