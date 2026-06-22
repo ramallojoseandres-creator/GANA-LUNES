@@ -1,0 +1,16 @@
+{
+  "name": "gana-lunes",
+  "private": true,
+  "description": "Ganadores.io — sitio estático (deportes, hipismo, casino) + parches del bundle",
+  "scripts": {
+    "patch": "node scripts/patch-stake-ui.mjs && node scripts/patch-admin.mjs",
+    "patch:sports": "node scripts/patch-stake-ui.mjs",
+    "patch:admin": "node scripts/patch-admin.mjs",
+    "check": "node --check assets/index-DZfj7dy3.js",
+    "serve": "npx --yes serve -l 8766",
+    "serve:py": "python -m http.server 8766"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

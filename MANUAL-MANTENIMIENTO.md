@@ -177,12 +177,24 @@ Checklist rápido:
 
 ## 7. Mapa de carpetas del proyecto
 
-| Carpeta | Para qué sirve |
-|---------|----------------|
-| `Downloads/ganadores-web-lista (1)` | **Lo que subes al hosting** |
+| Carpeta / repo | Para qué sirve |
+|----------------|----------------|
+| **GitHub:** `ramallojoseandres-creator/GANA-LUNES` | Código del sitio (clonar en otra PC con Cursor) |
+| Este proyecto (`GANA-LUNES`) | **Lo que subes al hosting** |
 | `Downloads/112233` | Cron Railway → Supabase (deportes + caballos) |
 | `ganadores-odds` (repo viejo) | Scraper local antiguo; no es lo de Railway |
 | `Downloads/pruebasabado-main` | Código fuente React (si algún día recompilas) |
+
+### Clonar en otra PC
+
+```powershell
+git clone https://github.com/ramallojoseandres-creator/GANA-LUNES.git
+cd GANA-LUNES
+cursor .
+npm run serve
+```
+
+Ver también `README.md` en la raíz del repo.
 
 ---
 

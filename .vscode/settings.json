@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.mjs": "javascript"
+  },
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/assets/index-DZfj7dy3.js": false
+  },
+  "editor.formatOnSave": false,
+  "html.customData": []
+}
