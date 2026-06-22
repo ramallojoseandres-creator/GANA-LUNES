@@ -268,6 +268,7 @@ function NQ() {
   };
 
   const horseColors = ["#e53935", "#fff", "#2563eb", "#eab308", "#7c3aed", "#111", "#16a34a", "#f97316"];
+  const horseIcon = W.jsx("img", { className: "st-race-icon", src: "./images/horse-racing.svg", alt: "", "aria-hidden": true });
 
   const HorseUI = () => {
     const races = groupRaces(shown);
@@ -283,12 +284,6 @@ function NQ() {
     return W.jsxs("div", {
       className: "st-page st-horse-layout" + (race ? " show-race" : ""),
       children: [
-        W.jsxs("div", { className: "st-horse-filters", children: [
-          W.jsx("button", { className: "st-filter-btn full", children: "Países & Tipo de Carreras ▾" }),
-          W.jsx("button", { className: "st-filter-btn full", children: "País ▾" }),
-          W.jsx("button", { className: "st-filter-btn", children: "Tipos ▾" }),
-          W.jsx("button", { className: "st-filter-btn", children: "Límites ▾" }),
-        ] }),
         W.jsx("div", {
           className: "st-race-list mobile-only",
           children: races.map((rc) => {
@@ -301,7 +296,7 @@ function NQ() {
                 className: "st-race-item" + (active === rc ? " is-active" : ""),
                 onClick: () => setRace(rc),
                 children: [
-                  W.jsx("span", { className: "st-race-icon", children: "🐎" }),
+                  horseIcon,
                   W.jsxs("div", { className: "st-race-info", children: [
                     W.jsx("div", { className: "st-race-track", children: `${track.toUpperCase()}${num ? " #" + num[1] : ""}` }),
                   ] }),
@@ -320,7 +315,7 @@ function NQ() {
             className: "st-race-item" + (active === rc ? " is-active" : ""),
             onClick: () => setRace(rc),
             children: [
-              W.jsx("span", { className: "st-race-icon", children: "🐎" }),
+              horseIcon,
               W.jsxs("div", { className: "st-race-info", children: [
                 W.jsx("div", { className: "st-race-track", children: `${track.toUpperCase()}${num ? " #" + num[1] : ""}` }),
               ] }),
@@ -338,19 +333,14 @@ function NQ() {
                   onClick: () => setRace(null),
                   children: "←",
                 }),
-                "🐎 ",
+                W.jsx("img", { className: "st-race-icon st-race-icon-inline", src: "./images/horse-racing.svg", alt: "" }),
                 active.league,
               ] }),
               W.jsxs("div", { className: "st-race-meta-bar", children: [
                 W.jsxs("span", { children: ["📅 ", new Date(active.time).toLocaleString("es")] }),
-                W.jsx("span", { children: "W/P/S" }),
+                W.jsx("span", { children: "Win / Place / Show" }),
               ] }),
-              W.jsxs("div", { className: "st-race-tabs", children: [
-                W.jsx("button", { className: "st-race-tab gac", children: "Gaceta" }),
-                W.jsx("button", { className: "st-race-tab video", children: "Video" }),
-                W.jsx("button", { className: "st-race-tab wps", children: "W/P/S" }),
-                W.jsx("button", { className: "st-race-tab exo", children: "Exótica ▾" }),
-              ] }),
+              W.jsxs("div", { className: "st-race-panel-scroll", children: [
               W.jsxs("table", { className: "st-wps-table", children: [
                 W.jsx("thead", { children: W.jsxs("tr", { children: [
                   W.jsx("th", { children: "N#" }),
@@ -384,6 +374,7 @@ function NQ() {
                     ),
                   ] }, h.id);
                 }) }),
+              ] }),
               ] }),
             ] })
           : W.jsx("div", { className: "gd-empty", children: "Selecciona una carrera" }),

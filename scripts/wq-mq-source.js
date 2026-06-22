@@ -4,6 +4,12 @@ function wQ() {
   const nav = Ms();
   const [h, p] = l.useState(10);
   const [m, v] = l.useState(false);
+  const [isMob, setIsMob] = l.useState(() => typeof window !== "undefined" && window.innerWidth < 768);
+  l.useEffect(() => {
+    const onResize = () => setIsMob(window.innerWidth < 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
   const S = e.length;
   const b = t === "parlay" ? h * a : e.reduce((x, w) => x + h * Number(w.odds), 0);
   const y = t === "parlay" ? h : h * S;
@@ -17,16 +23,17 @@ function wQ() {
     v(false);
   };
   if (!S) return null;
-  const isMob = typeof window !== "undefined" && window.innerWidth < 768;
   return W.jsxs(W.Fragment, {
     children: [
       isMob
         ? W.jsxs("div", {
             className: "gd-slip-bar",
             onClick: () => o(true),
+            role: "button",
+            tabIndex: 0,
             children: [
-              W.jsxs("span", { style: { fontWeight: 800, color: "#fff" }, children: [t === "parlay" ? "Combinada" : "Sencillas", " (", S, ")"] }),
-              W.jsxs("span", { style: { marginLeft: "auto", color: "#1a8cff", fontWeight: 800 }, children: [a.toFixed(2), " →"] }),
+              W.jsxs("span", { className: "gd-slip-bar-label", children: ["🎟 Talón · ", t === "parlay" ? "Combinada" : "Sencillas", " (", S, ")"] }),
+              W.jsxs("span", { className: "gd-slip-bar-odds", children: [a.toFixed(2), " →"] }),
             ],
           })
         : W.jsxs("button", {
