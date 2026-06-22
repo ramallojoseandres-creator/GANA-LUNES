@@ -428,7 +428,22 @@ main {
   transform: translateY(-1px);
 }
 
-.st-race-icon { font-size: 22px; flex-shrink: 0; }
+.st-race-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
+}
+
+.st-race-icon-inline {
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  filter: brightness(0) invert(1);
+}
 
 .st-race-info { flex: 1; min-width: 0; }
 
