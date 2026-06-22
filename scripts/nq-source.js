@@ -284,12 +284,6 @@ function NQ() {
     return W.jsxs("div", {
       className: "st-page st-horse-layout" + (race ? " show-race" : ""),
       children: [
-        W.jsxs("div", { className: "st-horse-filters", children: [
-          W.jsx("button", { className: "st-filter-btn full", children: "Países & Tipo de Carreras ▾" }),
-          W.jsx("button", { className: "st-filter-btn full", children: "País ▾" }),
-          W.jsx("button", { className: "st-filter-btn", children: "Tipos ▾" }),
-          W.jsx("button", { className: "st-filter-btn", children: "Límites ▾" }),
-        ] }),
         W.jsx("div", {
           className: "st-race-list mobile-only",
           children: races.map((rc) => {
@@ -344,14 +338,9 @@ function NQ() {
               ] }),
               W.jsxs("div", { className: "st-race-meta-bar", children: [
                 W.jsxs("span", { children: ["📅 ", new Date(active.time).toLocaleString("es")] }),
-                W.jsx("span", { children: "W/P/S" }),
+                W.jsx("span", { children: "Win / Place / Show" }),
               ] }),
-              W.jsxs("div", { className: "st-race-tabs", children: [
-                W.jsx("button", { className: "st-race-tab gac", children: "Gaceta" }),
-                W.jsx("button", { className: "st-race-tab video", children: "Video" }),
-                W.jsx("button", { className: "st-race-tab wps", children: "W/P/S" }),
-                W.jsx("button", { className: "st-race-tab exo", children: "Exótica ▾" }),
-              ] }),
+              W.jsxs("div", { className: "st-race-panel-scroll", children: [
               W.jsxs("table", { className: "st-wps-table", children: [
                 W.jsx("thead", { children: W.jsxs("tr", { children: [
                   W.jsx("th", { children: "N#" }),
@@ -385,6 +374,7 @@ function NQ() {
                     ),
                   ] }, h.id);
                 }) }),
+              ] }),
               ] }),
             ] })
           : W.jsx("div", { className: "gd-empty", children: "Selecciona una carrera" }),

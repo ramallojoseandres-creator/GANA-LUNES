@@ -96,7 +96,11 @@ const betslipPatches = [
 ];
 
 for (const p of betslipPatches) {
-  if (!s.includes(p.old)) {
+    if (!s.includes(p.old)) {
+    if (p.name.includes('talón') && s.includes('localStorage.removeItem("gd_betslip")')) {
+      console.log(`SKIP: ${p.name} (ya aplicado)`);
+      continue;
+    }
     if (p.name.includes('auto') && !s.includes('c(!0)},[]),d=l.useCallback(v=>o(S=>S.filter(b=>b.key!==v)),[]),f=l.useCallback(()=>o([]),[]),')) {
       console.log(`SKIP: ${p.name} (ya aplicado)`);
       continue;
