@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-ipa:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,6 +20,11 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: pdf-editor/package-lock.json
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app || sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
 
       - name: Install and build web
         working-directory: pdf-editor
@@ -60,11 +65,12 @@ jobs:
           cd "$RUNNER_TEMP"
           zip -qr "$GITHUB_WORKSPACE/origen/releases/Origen.ipa" Payload
           ls -lh "$GITHUB_WORKSPACE/origen/releases/Origen.ipa"
+          cp "$GITHUB_WORKSPACE/origen/releases/Origen.ipa" "$GITHUB_WORKSPACE/Origen.ipa"
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
           name: Origen.ipa
-          path: origen/releases/Origen.ipa
+          path: Origen.ipa
           if-no-files-found: error
           retention-days: 30
