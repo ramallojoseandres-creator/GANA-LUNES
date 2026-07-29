@@ -1,8 +1,12 @@
 # Origen — paquetes instalables
 
-## Android
-- `Origen.apk` — instálalo en el teléfono (permite fuentes desconocidas).
+## iPhone — `Origen.ipa`
+1. Descarga `Origen.ipa`
+2. Instálalo con [Sideloadly](https://sideloadly.io) o AltStore usando tu Apple ID gratis
+3. En el iPhone: Ajustes → General → Gestión de VPN y dispositivos → confiar en el certificado
 
-## iPhone (IPA)
-- `Origen.ipa` — se genera con GitHub Actions (workflow **Build Origen IPA**).
-- Instálalo con [Sideloadly](https://sideloadly.io) o AltStore usando tu Apple ID.
+## Android — `Origen.apk`
+1. Descarga `Origen.apk`
+2. Permite instalar apps de fuentes desconocidas e instálalo
+
+Bundle ID: `io.origen.pdf`
