@@ -10,7 +10,7 @@
     "serve": "npx --yes serve -l 8766",
     "serve:py": "python -m http.server 8766",
     "pdf:dev": "npm --prefix pdf-editor run dev",
-    "pdf:build": "npm --prefix pdf-editor run build",
+    "pdf:build": "npm --prefix pdf-editor run build && rm -rf origen && mkdir -p origen && cp -a pdf-editor/dist/. origen/",
     "pdf:preview": "npm --prefix pdf-editor run preview"
   },
   "engines": {
