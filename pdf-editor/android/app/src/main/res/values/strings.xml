@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Origen</string>
+    <string name="title_activity_main">Origen</string>
+    <string name="package_name">io.origen.pdf</string>
+    <string name="custom_url_scheme">io.origen.pdf</string>
+</resources>
