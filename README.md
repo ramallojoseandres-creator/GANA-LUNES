@@ -6,6 +6,22 @@ Sitio estático: casino, deportes, hipismo y panel admin. Backend en Supabase.
 
 ---
 
+## Origen — Editor PDF
+
+App en `pdf-editor/` (código) y build listo en **`/origen/`** para subir al hosting.
+
+```bash
+npm run pdf:dev      # desarrollo
+npm run pdf:build    # build → pdf-editor/dist
+# Tras build, la carpeta /origen/ del repo es la versión desplegable
+```
+
+En el hosting abre: `https://tu-dominio/origen/`
+
+Detalles: [pdf-editor/README.md](pdf-editor/README.md)
+
+---
+
 ## Otra PC con Cursor (inicio rápido)
 
 ### 1. Requisitos

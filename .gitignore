@@ -1,4 +1,6 @@
 node_modules/
+pdf-editor/node_modules/
+pdf-editor/dist/
 .DS_Store
 Thumbs.db
 *.log

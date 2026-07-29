@@ -1,0 +1,76 @@
+name: Build Origen IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cursor/pdf-editor-fuentes-472f
+      - main
+
+jobs:
+  build-ipa:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: pdf-editor/package-lock.json
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app || sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Install and build web
+        working-directory: pdf-editor
+        run: |
+          npm ci
+          npm run build
+
+      - name: Sync Capacitor iOS
+        working-directory: pdf-editor
+        run: npx cap sync ios
+
+      - name: Build unsigned iOS app
+        working-directory: pdf-editor/ios/App
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package IPA
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/Payload" origen/releases
+          APP=$(find "$RUNNER_TEMP/DerivedData/Build/Products/Release-iphoneos" -maxdepth 1 -name "*.app" | head -1)
+          echo "Found app: $APP"
+          test -n "$APP"
+          cp -R "$APP" "$RUNNER_TEMP/Payload/"
+          cd "$RUNNER_TEMP"
+          zip -qr "$GITHUB_WORKSPACE/origen/releases/Origen.ipa" Payload
+          ls -lh "$GITHUB_WORKSPACE/origen/releases/Origen.ipa"
+          cp "$GITHUB_WORKSPACE/origen/releases/Origen.ipa" "$GITHUB_WORKSPACE/Origen.ipa"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Origen.ipa
+          path: Origen.ipa
+          if-no-files-found: error
+          retention-days: 30
