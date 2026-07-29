@@ -6,6 +6,19 @@ Sitio estático: casino, deportes, hipismo y panel admin. Backend en Supabase.
 
 ---
 
+## Origen — Editor PDF
+
+App en `pdf-editor/`: edita PDFs preservando (y descargando) las fuentes originales.
+
+```bash
+npm run pdf:dev      # desarrollo
+npm run pdf:build    # build de producción → pdf-editor/dist
+```
+
+Detalles: [pdf-editor/README.md](pdf-editor/README.md)
+
+---
+
 ## Otra PC con Cursor (inicio rápido)
 
 ### 1. Requisitos

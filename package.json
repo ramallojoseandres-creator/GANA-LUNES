@@ -1,14 +1,17 @@
 {
   "name": "gana-lunes",
   "private": true,
-  "description": "Ganadores.io — sitio estático (deportes, hipismo, casino) + parches del bundle",
+  "description": "Ganadores.io — sitio estático (deportes, hipismo, casino) + Origen PDF editor",
   "scripts": {
     "patch": "node scripts/patch-stake-ui.mjs && node scripts/patch-admin.mjs",
     "patch:sports": "node scripts/patch-stake-ui.mjs",
     "patch:admin": "node scripts/patch-admin.mjs",
     "check": "node --check assets/index-DZfj7dy3.js",
     "serve": "npx --yes serve -l 8766",
-    "serve:py": "python -m http.server 8766"
+    "serve:py": "python -m http.server 8766",
+    "pdf:dev": "npm --prefix pdf-editor run dev",
+    "pdf:build": "npm --prefix pdf-editor run build",
+    "pdf:preview": "npm --prefix pdf-editor run preview"
   },
   "engines": {
     "node": ">=18"
