@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SDR Server</string>
+    <string name="notification_channel">Servidor SDR</string>
+    <string name="notification_title">Servidor SDR activo</string>
+    <string name="notification_text">Escuchando en %1$s:%2$d · %3$d clientes</string>
+    <string name="start_server">Iniciar servidor</string>
+    <string name="stop_server">Detener servidor</string>
+    <string name="status_stopped">Detenido</string>
+    <string name="status_running">En línea</string>
+    <string name="copy_endpoint">Copiar IP:puerto</string>
+    <string name="copied">Copiado al portapapeles</string>
+</resources>
